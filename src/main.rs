@@ -1,5 +1,6 @@
 use std::io::prelude::*;
-use std::io::BufReader;
+use std::env;
+use std::io::{BufReader, stdin};
 use std::fs::File;
 use std::collections::HashMap;
 
@@ -9,24 +10,29 @@ fn vec_format(text: &str) -> Vec<&str> {
     vector
 }
 
-fn main() -> std::io::Result<()> {
-    let file = File::open("DFA-Test.txt")?;
+fn main() -> Result<(), std::io::Error> {
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 1 {
+        panic!("\nFormat: cargo run <dfa.txt>\nPlease try again!");
+    }
+    let file = File::open(&args[1])?;
+
     let mut buf_reader = BufReader::new(file);
     
     // Gets the alphabet
     let mut text = String::new();
     buf_reader.read_line(&mut text)?;
-    let alphabet: Vec<&str> = vec_format(&text); 
+    let _alphabet: Vec<&str> = vec_format(&text); 
     
     // Gets the states
     let mut text = String::new();
     buf_reader.read_line(&mut text)?;
-    let states: Vec<&str> = vec_format(&text);
+    let _states: Vec<&str> = vec_format(&text);
 
     // Gets the start state
     let mut text = String::new();
     buf_reader.read_line(&mut text)?;
-    let start_state = text;
+    let start_state: char = text.chars().nth(0).unwrap();
    
     // Gets the accept states
     let mut text = String::new(); // new text var is necessary here b/c prev var was owned by prev func
@@ -55,6 +61,30 @@ fn main() -> std::io::Result<()> {
     for (key, val) in transitive_functions.iter() {
         println!("key: {}, val: {}", key, val);
     }
+    
+    let mut user_input = String::new();
+    println!("Enter your string!");
+    stdin()
+        .read_line(&mut user_input)
+        .expect("Failed to readline");
+    
+    let mut curr_state = start_state;
+    let mut func = String::new();
+    for x in user_input.trim().chars(){
+        func.push(curr_state);
+        func.push(x);
 
+        curr_state = *(transitive_functions.get(&func).unwrap());
+        func.clear();
+    }
+
+    for x in accept_states {
+        if x.chars().nth(0).unwrap() == curr_state {
+            println!("This string is compatible with the given language!"); 
+            return Ok(());
+        }
+    }
+
+    println!("This string is not compatible with the given language");
     Ok(())
 }
