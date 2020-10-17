@@ -80,11 +80,11 @@ fn main() -> Result<(), std::io::Error> {
 
     for x in accept_states {
         if x.chars().nth(0).unwrap() == curr_state {
-            println!("This string is compatible with the given language!"); 
+            println!("This string is compatible with the given machine!"); 
             return Ok(());
         }
     }
 
-    println!("This string is not compatible with the given language");
+    println!("This string is not compatible with the given machine!");
     Ok(())
 }
