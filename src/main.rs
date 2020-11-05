@@ -32,7 +32,7 @@ fn main() -> Result<(), std::io::Error> {
     // Gets the start state
     let mut text = String::new();
     buf_reader.read_line(&mut text)?;
-    let start_state: char = text.chars().nth(0).unwrap();
+    let start_state: char = text.chars().next().unwrap();
    
     // Gets the accept states
     let mut text = String::new(); // new text var is necessary here b/c prev var was owned by prev func
@@ -79,7 +79,7 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     for x in accept_states {
-        if x.chars().nth(0).unwrap() == curr_state {
+        if x.chars().next().unwrap() == curr_state {
             println!("This string is compatible with the given machine!"); 
             return Ok(());
         }
