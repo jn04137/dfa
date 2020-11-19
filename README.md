@@ -11,7 +11,7 @@ Install rust from https://www.rust-lang.org/tools/install
 
 To use the program, download the repository.
 
-Open the directory while in the terminal.
+Open the "/src" directory while in the terminal.
 
 Type "cargo build" to compile the executable.
 
